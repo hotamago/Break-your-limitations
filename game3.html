@@ -20,6 +20,8 @@
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
         integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
 
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
@@ -88,7 +90,7 @@
 
             <li class="nav-heading">Quản trị</li>
             <li class="nav-item">
-                <a class="nav-link collapsed" href="dashboard.html">
+                <a class="nav-link " href="dashboard.html">
                     <span>Dashboard</span>
                 </a>
             </li><!-- End Dashboard Nav -->
@@ -107,7 +109,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link " href="game3.html">
+                <a class="nav-link collapsed" href="game3.html">
                     <span>Game 3: Hãy chọn ý đúng</span>
                 </a>
             </li>
@@ -156,6 +158,32 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="col-12 question-box rounded">
+                            <p> <span class="fw-bold">Câu hỏi 1: </span> Lorem ipsum, dolor sit amet consectetur
+                                adipisicing elit. Impedit perferendis quisquam, similique doloremque voluptatibus
+                                commodi sed maxime at reiciendis exercitationem non, est consequatur deserunt facere
+                                molestias enim esse, rerum ad.</p>
+                            <img src="assets/img/Test/game1.jpg" class="img-fluid" alt="">
+                        </div>
+
+                        <div class="containter">
+                            <div class="row list-answer justify-content-around">
+                                <div id="true" class="col-5 bg-danger">
+                                    <p> <span class="fw-bold pe-2">A.</span> Đáp án A <i class="ans-icon far fa-check-circle"></i></p>
+                                </div>
+                                <div class="col-5 bg-primary">
+                                    <p> <span class="fw-bold pe-2">B.</span> Đáp án A</p>
+                                </div>
+                                <div class="col-5 bg-warning">
+                                    <p> <span class="fw-bold pe-2">C.</span> Đáp án A</p>
+                                </div>
+                                <div class="col-5 bg-success">
+                                    <p> <span class="fw-bold pe-2">D.</span> Đáp án A</p>
+                                </div>
+                            </div>
+                        <h6></h6>
+                        
                     </div>
                 </div>
             </div>
@@ -166,7 +194,7 @@
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer">
         <div class="copyright">
-            &copy; Copyright <strong><span>Tên khách hàng</span></strong>. All Rights Reserved
+            &copy; Copyright <strong><span>Name client</span></strong>. All Rights Reserved
         </div>
         <div class="credits">
             Develop by <a href="">Tuấn Đạt</a>, <a href="">Hoàng Sơn</a>
@@ -177,7 +205,34 @@
 
     <!-- Vendor JS Files -->
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+
+    <!-- Template Main JS File -->
+    <script src="assets/js/main.js"></script>
+    <script>
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+
+        toastr.success('Correct!')
+        toastr.error('Incorrect!')
+    </script>
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 

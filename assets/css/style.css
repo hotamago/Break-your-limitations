@@ -25,6 +25,13 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "Nunito", sans-serif;
 }
 
+h1 {
+  font-weight: 700;
+}
+
+.fix-img {
+  height: 15rem;
+}
 /*--------------------------------------------------------------
 # Main
 --------------------------------------------------------------*/
@@ -533,15 +540,16 @@ h1, h2, h3, h4, h5, h6 {
 .main-content .info-card {
   padding: 2rem 0rem;
 }
+
 .main-content .info-card h6 {
   font-size: 1.1rem;
   color: #012970;
   font-weight: 700;
-  margin: 0;
-  padding: 0.5rem;
+  margin: 0.5rem 0;
+  padding: 0;
 }
 .main-content .card-icon {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   line-height: 0;
   width: 55px;
   height: 55px;
@@ -549,13 +557,49 @@ h1, h2, h3, h4, h5, h6 {
   flex-grow: 0;
 }
 
-.main-content .timer {
-  background-color: rgba(255, 255, 255, 0.6);
+.main-content .info-card .question-box {
+  background-color: #ffe7e7;
+  padding: 1rem 0;
+  margin: 1rem 0;
+}
+
+.main-content .list-answer div {
+  border-radius: 5px;
+  margin: 0.8rem 0 0 0;
+  height: 4rem;
+  line-height: 4rem;
+  display: flex;
+  justify-content: start;
+}
+
+.main-content .list-answer div:hover {
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+.main-content .list-answer .ans-icon {
+  padding: 0 0 0 5px;
+}
+
+.main-content .list-answer div:not(#true) {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.main-content .list-answer div p {
+  color: white;
+}
+
+.main-content .info-card .timer {
+  background-color: #e0f8e9;
 }
 
 .main-content .timer .card-icon {
   color: #2eca6a;
   background: #e0f8e9;
+  -webkit-animation:spin 4s linear infinite;
+    -moz-animation:spin 4s linear infinite;
+    animation:spin 4s linear infinite;
 }
 
 /*--------------------------------------------------------------
@@ -576,4 +620,20 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
   font-size: 13px;
   color: #012970;
+}
+
+/*--------------------------------------------------------------
+# Animation
+--------------------------------------------------------------*/
+@-moz-keyframes spin { 
+  100% { -moz-transform: rotate(360deg); } 
+}
+@-webkit-keyframes spin { 
+  100% { -webkit-transform: rotate(360deg); } 
+}
+@keyframes spin { 
+  100% { 
+      -webkit-transform: rotate(360deg); 
+      transform:rotate(360deg); 
+  } 
 }
