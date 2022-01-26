@@ -16,3 +16,8 @@ firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 //U5Dbgs1dUW6iiyxb2y44
 var main_questions = db.collection("main-questions").doc("U5Dbgs1dUW6iiyxb2y44");
+
+function shuffle(array) {
+    array.sort(() => Math.random() - 0.5);
+}
+  
