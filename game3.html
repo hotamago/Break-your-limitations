@@ -133,8 +133,7 @@
                                 <div class="row mt-2">
                                     <div class="col-12">
                                         <h5>Câu hỏi</h5>
-                                        <div class="alert border-primary alert-dismissible fade show" role="alert">
-                                            {{ question }}
+                                        <div class="alert border-primary alert-dismissible fade show" role="alert" v-html="question">
                                         </div>
                                     </div>
                                 </div>
@@ -148,7 +147,7 @@
                                 <div class="row mt-2">
                                     <div class="col-md-12 col-lg-6 d-grid mt-2" v-for="(item, index) in answers"
                                         v-bind:index="index" v-item:="item">
-                                        <button type="button" v-on:click="showAns = true" v-bind:class="{'btn': true, 'btn-outline-primary':!showAns, 'btn-success':(showAns && item.true_ans), 'btn-danger':(showAns && !item.true_ans)}">{{ item.content }}</button>
+                                        <button type="button" v-on:click="checkAns(item.true_ans)" v-bind:class="{'btn': true, 'btn-outline-primary':(showAns == 0), 'btn-success':(showAns != 0 && item.true_ans), 'btn-danger':(showAns == 2 && !item.true_ans)}">{{ item.content }}</button>
                                     </div>
                                 </div>
                                 <div class="row mt-2" v-if="showAns">
@@ -158,31 +157,6 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="col-12 question-box rounded">
-                            <p> <span class="fw-bold">Câu hỏi 1: </span> Lorem ipsum, dolor sit amet consectetur
-                                adipisicing elit. Impedit perferendis quisquam, similique doloremque voluptatibus
-                                commodi sed maxime at reiciendis exercitationem non, est consequatur deserunt facere
-                                molestias enim esse, rerum ad.</p>
-                            <img src="assets/img/Test/game1.jpg" class="img-fluid" alt="">
-                        </div>
-
-                        <div class="containter">
-                            <div class="row list-answer justify-content-around">
-                                <div id="true" class="col-5 bg-danger">
-                                    <p> <span class="fw-bold pe-2">A.</span> Đáp án A <i class="ans-icon far fa-check-circle"></i></p>
-                                </div>
-                                <div class="col-5 bg-primary">
-                                    <p> <span class="fw-bold pe-2">B.</span> Đáp án A</p>
-                                </div>
-                                <div class="col-5 bg-warning">
-                                    <p> <span class="fw-bold pe-2">C.</span> Đáp án A</p>
-                                </div>
-                                <div class="col-5 bg-success">
-                                    <p> <span class="fw-bold pe-2">D.</span> Đáp án A</p>
-                                </div>
-                            </div>
-                        <h6></h6>
                         
                     </div>
                 </div>
@@ -229,13 +203,12 @@
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         }
-
-        toastr.success('Correct!')
-        toastr.error('Incorrect!')
     </script>
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 
+    <!-- markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- API firestore -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -273,7 +246,7 @@
                     { content: "ans loading...", true_ans: true },
                 ],
                 btn_confi: ["btn-danger", "btn-success"],
-                showAns: false,
+                showAns: 0,
                 questions: null,
                 firstQuery: false
             },
@@ -306,8 +279,19 @@
                     this.showAns = false;
                     this.timenow = 0;
                     var index = getRndInteger(0, this.questions.length - 1);
-                    this.question = this.questions[index].question;
+                    this.question = marked.parse(this.questions[index].question);
                     this.answers = this.questions[index].ans;
+                },
+                checkAns: function (true_ans) {
+                    if(this.showAns == 0){
+                        this.showAns = 1;
+                        if(true_ans) {
+                            toastr.success('Correct!');
+                        } else{
+                            toastr.error('Incorrect!');
+                            this.showAns = 2;
+                        }
+                    }
                 }
             },
             created: function () {
