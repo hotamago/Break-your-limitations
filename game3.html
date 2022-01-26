@@ -210,6 +210,9 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <script src="configFirebase.js"></script>
     <script>
+        var db = firebase.firestore();
+        //U5Dbgs1dUW6iiyxb2y44
+        var main_questions = db.collection("main-questions").doc("U5Dbgs1dUW6iiyxb2y44");
         function shuffle(array) {
             array.sort(() => Math.random() - 0.5);
         }
