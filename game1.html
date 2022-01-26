@@ -120,30 +120,56 @@
                 <div class="col-12">
                     <div class="card info-card text-center">
                         <h1>Nhìn hình viết chữ</h1>
-                        <h6>Ghi nhớ chữ sau trong 15 giây</h6>
-                        <div class="row justify-content-center pb-2">
-                            <div class="col-2 timer d-flex align-items-center text-center rounded">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="far fa-hourglass"></i> 
-                                </div>
-                                <div class="ps-3">
-                                    <h6>15s</h6>
+                        <h6 v-if="(showAns == 0)">Ghi nhớ chữ sau trong 15 giây</h6>
+                        <button class="btn btn-primary" type="button" disabled="" v-if="!firstQuery">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading questions...
+                        </button>
+                        <div v-show="firstQuery">
+                            <div class="d-grid justify-content-center pb-2" v-if="(showAns == 0)">
+                                <div class="timer d-flex align-items-center text-center rounded">
+                                    <div
+                                        class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="far fa-hourglass"></i>
+                                    </div>
+                                    <div class="ps-3" style="padding-right: 2rem!important;">
+                                        <h6>{{ (timemax - timenow) }}s</h6>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <img src="assets/img/Test/game1.jpg" class="img-fluid fix-img" alt="">
-                                <h4>Hoa</h4>
-                            </div>
-                            <div class="col-6">
-                                <img src="https://hanngutracviet.com/uploads/news/2016_09/2.jpg" class="img-fluid fix-img" alt="">
+                            <div class="row">
+                                <div class="col-md-12 col-lg-6" v-if="(showAns != 2)">
+                                    <img v-bind:src="question.img1" class="img-fluid fix-img" alt="">
+                                    <h4>{{ question.title }}</h4>
+                                </div>
+                                <div class="col-md-12 col-lg-6" v-if="(showAns != 1)">
+                                    <img v-bind:src="question.img2" class="img-fluid fix-img" alt="">
+                                </div>
+                                <div class="col-md-12 col-lg-6" v-if="(showAns != 0)">
+                                    <canvas width="300" height="300" id="mainCanvas"></canvas>
+                                </div>
+                                <div class="row mt-2" v-if="(showAns == 2)">
+                                    <div class="col-12 mt-2 d-grid">
+                                        <button type="button" v-on:click="getRandomQuestion()"
+                                            class="btn btn-outline-primary">Câu tiếp theo</button>
+                                    </div>
+                                </div>
+                                <div class="row mt-2" v-if="(showAns == 1)">
+                                    <div class="col-12 mt-2 d-grid">
+                                        <button type="button" v-on:click="checkAns()"
+                                            class="btn btn-outline-primary">Kiểm tra</button>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <button type="button" v-on:click="clearScreen()"
+                                            class="btn btn-outline-danger">Bảng trắng</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
         </section>
 
     </main><!-- End #main -->
@@ -165,6 +191,156 @@
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- API firestore -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <!-- Vuejs -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <style type="text/css">
+        canvas {
+            background: #FFF;
+            border-radius: 5px;
+            border-left: 1px solid #E0E0E0;
+            border-right: 1px solid #E0E0E0;
+            border-top: 1px solid #E0E0E0;
+            box-shadow: 0 4px 0 0 #E0E0E0;
+        }
+    </style>
+    <script>
+        function getRndInteger(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFhoS866U8BDGEX5Hvhi0nXwPNTJgI4BI",
+            authDomain: "break-your-limitations.firebaseapp.com",
+            projectId: "break-your-limitations",
+            storageBucket: "break-your-limitations.appspot.com",
+            messagingSenderId: "622219681947",
+            appId: "1:622219681947:web:9f028a12e1720a0fce263e",
+            measurementId: "G-E49C8W1T0S"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        var db = firebase.firestore();
+        //U5Dbgs1dUW6iiyxb2y44
+        var main_questions = db.collection("main-questions").doc("U5Dbgs1dUW6iiyxb2y44");
+
+        //App
+        var vm = new Vue({
+            el: '#main',
+            data: {
+                question: {
+                    img1: "",
+                    img2: "",
+                    title: ""
+                },
+                timemax: 2,
+                timenow: 0,
+                showAns: 0,
+                questions: null,
+                firstQuery: false
+            },
+            computed: {
+                calWidthTime: function () {
+                    return Math.floor(this.timenow / this.timemax * 100);
+                }
+            },
+            methods: {
+                countDownTimer: function () {
+                    if (this.timenow < this.timemax) {
+                        setTimeout(() => {
+                            this.timenow += 1;
+                            this.countDownTimer();
+                        }, 1000);
+                    } else {
+                        this.showAns = 1;
+                        //getRandomQuestion();
+                    }
+                },
+                super_update: function () {
+                    setTimeout(() => {
+                        if (this.questions != null && this.firstQuery == false) {
+                            this.firstQuery = true;
+                            this.getRandomQuestion();
+                        }
+                        this.super_update();
+                    }, 100);
+                },
+                getRandomQuestion: function () {
+                    this.showAns = false;
+                    this.timenow = 0;
+                    var index = getRndInteger(0, this.questions.length - 1);
+                    this.question = this.questions[index];
+                    this.countDownTimer();
+                },
+                checkAns: function () {
+                    if (this.showAns == 1) {
+                        this.showAns = 2;
+                    }
+                },
+                clearScreen: function () {
+                    //Paint
+                    var $canvas = $("canvas");
+                    var context = $canvas[0].getContext("2d");
+                    context.clearRect(0, 0, $canvas.width(), $canvas.height());
+                },
+                newCanvas: function () {
+                    //Paint
+                    var $canvas = $("canvas");
+                    var context = $canvas[0].getContext("2d");
+                    var lastEvent;
+                    var mouseDown = false;
+                    var colour = "black";
+
+                    // On mouse events on the canvas
+                    $canvas.mousedown(function (e) {
+                        lastEvent = e;
+                        mouseDown = true;
+                    }).mousemove(function (e) {
+                        // Draw lines
+                        if (mouseDown) {
+                            context.beginPath();
+                            context.moveTo(lastEvent.offsetX, lastEvent.offsetY);
+                            context.lineTo(e.offsetX, e.offsetY);
+                            context.strokeStyle = colour;
+                            context.lineWidth = 5;
+                            context.lineCap = 'round';
+                            context.stroke();
+                            lastEvent = e;
+                        }
+                    }).mouseup(function () {
+                        mouseDown = false;
+                    }).mouseleave(function () {
+                        $canvas.mouseup();
+                    });
+                }
+            },
+            mounted: function () {
+                this.$nextTick(() => {
+
+                });
+            },
+            updated: function () {
+                if(this.showAns == 1){
+                    this.newCanvas();
+                }
+            },
+            created: function () {
+                this.super_update();
+            }
+        });
+        main_questions.get().then((querySnapshot) => {
+            vm.$data.questions = querySnapshot.data()["questions01"];
+        }).catch((error) => {
+            console.log("Error getting documents: ", error);
+        });
+    </script>
 
 </body>
 
