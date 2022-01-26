@@ -118,11 +118,43 @@
         <section class="section main-content">
             <div class="row">
                 <div class="col-12">
-                    <div class="card info-card text-center">
-                        <h1>Hãy chọn ý đúng</h1>
-                        <h6></h6>
-                        <div class="progress mt-3">
-                            <div class="progress-bar bg-warning" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h1>Hãy chọn ý đúng</h1>
+                            </div>
+                            <button class="btn btn-primary" type="button" disabled="" v-if="!firstQuery">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Loading questions...
+                            </button>
+                            <div class="box-content" v-if="firstQuery">
+                                <div class="row mt-2">
+                                    <div class="col-12">
+                                        <h5>Câu hỏi</h5>
+                                        <div class="alert border-primary alert-dismissible fade show" role="alert">
+                                            {{ question }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning" role="progressbar"
+                                        v-bind:style="{width: calWidthTime+'%'}" v-bind:aria-valuenow="calWidthTime"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                -->
+                                <div class="row mt-2">
+                                    <div class="col-md-12 col-lg-6 d-grid mt-2" v-for="(item, index) in answers"
+                                        v-bind:index="index" v-item:="item">
+                                        <button type="button" v-on:click="showAns = true" v-bind:class="{'btn': true, 'btn-outline-primary':!showAns, 'btn-success':(showAns && item.true_ans), 'btn-danger':(showAns && !item.true_ans)}">{{ item.content }}</button>
+                                    </div>
+                                </div>
+                                <div class="row mt-2" v-if="showAns">
+                                    <div class="col-12 d-grid mt-2">
+                                        <button type="button" v-on:click="getRandomQuestion()" class="btn btn-outline-primary">Câu tiếp theo</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -149,13 +181,89 @@
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
 
+    <!-- API firestore -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <!-- Vuejs -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <script>
+        function getRndInteger(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFhoS866U8BDGEX5Hvhi0nXwPNTJgI4BI",
+            authDomain: "break-your-limitations.firebaseapp.com",
+            projectId: "break-your-limitations",
+            storageBucket: "break-your-limitations.appspot.com",
+            messagingSenderId: "622219681947",
+            appId: "1:622219681947:web:9f028a12e1720a0fce263e",
+            measurementId: "G-E49C8W1T0S"
+        };
+        firebase.initializeApp(firebaseConfig);
+        
+
+        var db = firebase.firestore();
+        //U5Dbgs1dUW6iiyxb2y44
+        var main_questions = db.collection("main-questions").doc("U5Dbgs1dUW6iiyxb2y44");
         var vm = new Vue({
             el: '#main',
-            data: {},
-
+            data: {
+                question: "question loading...",
+                timemax: 10,
+                timenow: 0,
+                answers: [
+                    { content: "ans loading...", true_ans: false },
+                    { content: "ans loading...", true_ans: true },
+                ],
+                btn_confi: ["btn-danger", "btn-success"],
+                showAns: false,
+                questions: null,
+                firstQuery: false
+            },
+            computed: {
+                calWidthTime: function () {
+                    return Math.floor(this.timenow / this.timemax * 100);
+                }
+            },
+            methods: {
+                countDownTimer: function () {
+                    if (this.timenow < this.timemax) {
+                        setTimeout(() => {
+                            this.timenow += 1;
+                            this.countDownTimer();
+                        }, 1000);
+                    } else {
+                        getRandomQuestion();
+                    }
+                },
+                super_update: function () {
+                    setTimeout(() => {
+                        if (this.questions != null && this.firstQuery == false) {
+                            this.firstQuery = true;
+                            this.getRandomQuestion();
+                        }
+                        this.super_update();
+                    }, 100);
+                },
+                getRandomQuestion: function () {
+                    this.showAns = false;
+                    this.timenow = 0;
+                    var index = getRndInteger(0, this.questions.length - 1);
+                    this.question = this.questions[index].question;
+                    this.answers = this.questions[index].ans;
+                }
+            },
+            created: function () {
+                //this.countDownTimer();
+                this.super_update();
+            }
+        });
+        main_questions.get().then((querySnapshot) => {
+            vm.$data.questions = querySnapshot.data()["questions03"];
+        }).catch((error) => {
+            console.log("Error getting documents: ", error);
         });
     </script>
 
