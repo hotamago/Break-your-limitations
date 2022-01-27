@@ -173,7 +173,7 @@
     <script>
         var db = firebase.firestore();
         if(getCookie("acc") == "") location.href = "admin_login.html";
-        var acc = JSON.parse(btoa(getCookie("acc")));
+        var acc = JSON.parse(atob(getCookie("acc")));
         firebase.auth().signInWithEmailAndPassword(acc.email, acc.password)
             .then(function (result) {
 
