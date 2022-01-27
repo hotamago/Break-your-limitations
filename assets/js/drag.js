@@ -83,6 +83,10 @@ function initiateGame() {
         <span class="droppable" data-quiz="${alphabeticallySortedRandomDroppable[i].id}"></span>
       </div>
     `);
+
+    // Load name col
+    document.getElementById('name-col-1').innerText = nameCol1;
+    document.getElementById('name-col-2').innerText = nameCol2;
   }
   
   draggableElements = document.querySelectorAll(".draggable");
@@ -134,7 +138,7 @@ function dragLeave(event) {
 function drop(event) {
   event.preventDefault();
   event.target.classList.remove("droppable-hover");
-  console.log(event.dataTransfer);
+  
   const draggableElementQuiz = event.dataTransfer.getData("text");
   const draggableElementQuizId = event.dataTransfer.getData("idTrue");
   const droppableElementQuiz = event.target.getAttribute("data-quiz");
@@ -147,7 +151,7 @@ function drop(event) {
     event.target.classList.add("dropped");
     draggableElement.classList.add("dragged");
     draggableElement.setAttribute("draggable", "false");
-    event.target.innerHTML = `<h6 style="color: ${draggableElement.style.color};">${draggableElementQuiz}</h6>`;
+    event.target.innerHTML = `<h6>${draggableElementQuiz}</h6>`;
     correct++;  
   }
   scoreSection.style.opacity = 0;
