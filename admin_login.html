@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Break your limitations</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <main>
+    <div class="container">
+
+      <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+              <div class="d-flex justify-content-center py-4">
+                <a href="index.html" class="logo d-flex align-items-center w-auto">
+                  <img src="assets/img/logo.png" alt="">
+                  <span class="d-none d-lg-block">Break your limitations</span>
+                </a>
+              </div><!-- End Logo -->
+
+              <div class="card mb-3">
+
+                <div class="card-body">
+
+                  <div class="pt-4 pb-2">
+                    <h5 class="card-title text-center pb-0 fs-4">Login to Admin</h5>
+                    <p class="text-center small">Enter your password to login</p>
+                  </div>
+
+                  <div class="d-flex justify-content-center" v-if="(login_status == 1)">
+                    <div class="spinner-grow text-success" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </div>
+
+                  <div class="alert alert-danger bg-danger text-light border-0 alert-dismissible fade show" role="alert"
+                    v-if="login_status == 2">
+                    {{ error }}
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
+                      aria-label="Close" v-on:click="login_status=0"></button>
+                  </div>
+
+                  <form class="row g-3 needs-validation" novalidate>
+                    <div class="col-12">
+                      <label for="yourEmail" class="form-label">Email</label>
+                      <input v-model="email" type="email" name="email" class="form-control" id="yourEmail" required>
+                      <div class="invalid-feedback">Please enter your email.</div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourPassword" class="form-label">Password</label>
+                      <input v-model="password" type="password" name="passwword" class="form-control" id="yourPassword"
+                        required>
+                      <div class="invalid-feedback">Please enter your password!</div>
+                    </div>
+
+                    <div class="col-12">
+                      <button class="btn btn-primary w-100" type="button" v-on:click="login()">Login</button>
+                    </div>
+                  </form>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main><!-- End #main -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+  <!-- jquery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <!-- API firestore -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <!-- Vuejs -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+  <script src="configFirebase.js"></script>
+  <script>
+    //App
+    var vm = new Vue({
+      el: 'main',
+      data: {
+        email: '',
+        password: "",
+        error: "",
+        login_status: 0
+      },
+      methods: {
+        login: function () {
+          if (this.login_status != 1) {
+            this.login_status = 1;
+            function changeData (login_status, error = '') {
+              vm.$data.error = error.message;
+              vm.$data.login_status = login_status;
+            }
+            firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+              .then(function (result) {
+                console.log(result);
+                changeData(0);
+                var acc = {
+                  email: vm.$data.email,
+                  password: vm.$data.password
+                };
+                setCookie("acc", btoa(JSON.stringify(acc)), 1);
+                location.href = "admin_questions.html";
+              }).catch(function (error) {
+                changeData(2, error);
+                console.log(error);
+              });
+          }
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
