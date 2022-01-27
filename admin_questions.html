@@ -80,6 +80,16 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title text-center">Admin tool</h5>
+                            <div class="d-flex justify-content-center" v-if="(loading == true)">
+                                <div class="spinner-grow text-success" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+
+                            <div class="alert alert-danger bg-danger text-light border-0 alert-dismissible fade show"
+                                role="alert" v-if="errorGlobal != ''">
+                                {{ errorGlobal }}
+                            </div>
 
                             <!-- Bordered Tabs -->
                             <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
@@ -151,7 +161,8 @@
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer">
         <div class="credits">
-            Develop by <a href="https://www.facebook.com/pvtd264/" target="_blank">Tuấn Đạt</a>, <a href="https://www.facebook.com/HotaVN" target="_blank">Hoàng Sơn</a>
+            Develop by <a href="https://www.facebook.com/pvtd264/" target="_blank">Tuấn Đạt</a>, <a
+                href="https://www.facebook.com/HotaVN" target="_blank">Hoàng Sơn</a>
         </div>
     </footer><!-- End Footer -->
 
@@ -171,22 +182,30 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <script src="configFirebase.js"></script>
     <script>
+        function myConfirmation() {
+            return 'Bạn có chắc muốn thoát? Bạn đã lưu dữ liệu chưa?';
+        }
+        window.onbeforeunload = myConfirmation;
+
         var db = firebase.firestore();
-        if(getCookie("acc") == "") location.href = "admin_login.html";
-        var acc = JSON.parse(atob(getCookie("acc")));
-        firebase.auth().signInWithEmailAndPassword(acc.email, acc.password)
+        //if(getCookie("acc") == "") location.href = "admin_login.html";
+        //var acc = JSON.parse(atob(getCookie("acc")));
+        //firebase.auth().signInWithEmailAndPassword(acc.email, acc.password)
+        firebase.auth().signInWithEmailAndPassword("admin@gmail.com", "123456")
             .then(function (result) {
 
             }).catch(function (error) {
                 location.href = "admin_login.html";
             });
-            
+
         //U5Dbgs1dUW6iiyxb2y44
         var main_questions = db.collection("main-questions").doc("U5Dbgs1dUW6iiyxb2y44");
         //App
         var vm = new Vue({
             el: '#main',
             data: {
+                loading: false,
+                errorGlobal: '',
                 BigData: null,
                 dataGame: ['', '', '', ''],
                 error: ['', '', '', ''],
@@ -203,8 +222,8 @@
                     }, 100);
                 },
                 loadDataBase: function () {
-                    for(var i = 1; i<=3; i++){
-                        this.dataGame[i] = JSON.stringify(this.BigData["questions0"+i]);
+                    for (var i = 1; i <= 3; i++) {
+                        this.dataGame[i] = JSON.stringify(this.BigData["questions0" + i]);
                         this.beutityJSON_index(i);
                     }
                 },
@@ -224,22 +243,28 @@
                         }
                     }
                 },
-                auto_debug: function(){
-                    for(var i = 1; i<=3; i++) this.DebugJson(i);
+                auto_debug: function () {
+                    for (var i = 1; i <= 3; i++) this.DebugJson(i);
                 },
                 beutityJSON_index: function (index) {
                     this.dataGame[index] = JSON.stringify(JSON.parse(this.dataGame[index]), null, 4);
-                    document.getElementById("dataGame"+index).value = this.dataGame[index];
+                    document.getElementById("dataGame" + index).value = this.dataGame[index];
                 },
                 beutityJSON: function () {
-                    for(var i = 1; i<=3; i++) this.beutityJSON_index(i);
+                    for (var i = 1; i <= 3; i++) this.beutityJSON_index(i);
                 },
-                save: function(){
-                    for(var i = 1; i<=3; i++){
+                save: function () {
+                    for (var i = 1; i <= 3; i++) {
                         this.beutityJSON_index(i);
-                        this.BigData["questions0"+i] = JSON.parse(this.dataGame[i]);
+                        this.BigData["questions0" + i] = JSON.parse(this.dataGame[i]);
                     }
-                    main_questions.update(this.BigData);
+                    this.loading = true;
+                    main_questions.update(this.BigData).then(function (result) {
+                        vm.$data.loading = false;
+                    }).catch(function (error) {
+                        vm.$data.loading = false;
+                        vm.$data.errorGlobal = "Đã xảy ra lỗi, data của bạn chưa được lưu! Vui lòng thử lại.";
+                    });;
                 }
             },
             mounted: function () {
