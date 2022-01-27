@@ -25,7 +25,7 @@
     <link href="assets/css/style.css" rel="stylesheet">
 </head>
 
-<body onload="init()">
+<body>
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -139,7 +139,7 @@
                                     <img v-bind:src="question.img2" class="img-fluid fix-img" alt="">
                                 </div>
                                 <div class="col-md-12 col-lg-6" v-if="(showAns != 0)">
-                                    <canvas width="300" height="300" id="mainCanvas"></canvas>
+                                    <canvas width="300" height="300" id="sig-canvas"></canvas>
                                 </div>
                                 <div class="row mt-2" v-if="(showAns == 2)">
                                     <div class="col-12 mt-2 d-grid">
@@ -148,23 +148,15 @@
                                     </div>
                                 </div>
                                 <div class="row mt-2" v-if="(showAns == 1)">
-                                    <div class="col-12 mt-2 d-grid">
-                                        <button type="button" v-on:click="checkAns()"
-                                            class="btn btn-outline-primary">Kiểm tra</button>
-                                    </div>
                                     <div class="col-12 mt-2">
                                         <button type="button" v-on:click="clearScreen()"
-                                            class="btn btn-outline-danger">Bảng trắng</button>
+                                            class="btn btn-outline-danger" id="sig-clearBtn">Reset bảng</button>
+                                    </div>
+                                    <div class="col-12 mt-2 d-grid">
+                                        <button type="button" v-on:click="checkAns()"
+                                            class="btn btn-outline-primary" id="sig-submitBtn">Kiểm tra</button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <img id="sig-image" src="" alt="Chữ viết của bạn sẽ xuất hiện tại đây!"/>
-                                    </div>
-                                </div>
-                                <textarea id="sig-dataUrl" class="form-control" rows="5"></textarea>
                             </div>
                         </div>
                     </div>

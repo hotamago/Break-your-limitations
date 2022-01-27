@@ -57,20 +57,13 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
+                            <a class="dropdown-item d-flex align-items-center" href="admin_login.html">
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span>Đăng nhập</span>
                             </a>
                         </li>
                         <li>
                             <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <i class="bi bi-box-arrow-right"></i>
-                                <span>Đăng xuất</span>
-                            </a>
                         </li>
 
                     </ul><!-- End Profile Dropdown Items -->
@@ -86,10 +79,10 @@
 
         <ul class="sidebar-nav" id="sidebar-nav">
 
-            <li class="nav-heading">Quản trị</li>
+            <li class="nav-heading">Menu</li>
             <li class="nav-item">
-                <a class="nav-link " href="dashboard.html">
-                    <span>Dashboard</span>
+                <a class="nav-link collapsed" href="index.html">
+                    <span>Home</span>
                 </a>
             </li><!-- End Dashboard Nav -->
 
@@ -101,7 +94,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="game2.html">
+                <a class="nav-link " href="game2.html">
                     <span>Game 2: Xếp đâu cho đúng</span>
                 </a>
             </li>
@@ -124,9 +117,22 @@
                         <section class="score">
                             <span class="correct">0</span>/<span class="total">0</span>
                             <button id="new-game-btn">New Game</button>
-                          </section>
-                          <section class="draggable-items"></section>
-                          <section class="matching-pairs"></section>
+                        </section>
+                        <section class="draggable-items"></section>
+                        <section class="matching-pairs"></section>
+
+                        <div class="row">
+                            <div class="col-3"></div>
+                            <div class="col-3">
+                                <img src="assets/img/box1.png" class="img-fluid" alt="">
+                                <h6 id="name-col-1">Tên cột</h6>
+                            </div>
+                            <div class="col-3">
+                                <img src="assets/img/box2.png" class="img-fluid" alt="">
+                                <h6 id="name-col-2">Tên cột</h6>
+                            </div>
+                            <div class="col-3"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -147,20 +153,15 @@
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+    <!-- API firestore -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="configFirebase.js"></script>
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
     <script src="assets/js/drag.js"></script>
-
-    <!-- Vuejs -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
-    <script>
-        var vm = new Vue({
-            el: '#main',
-            data: {},
-
-        });
-    </script> -->
 
 </body>
 
