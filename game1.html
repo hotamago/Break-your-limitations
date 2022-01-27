@@ -25,7 +25,7 @@
     <link href="assets/css/style.css" rel="stylesheet">
 </head>
 
-<body>
+<body onload="init()">
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -158,6 +158,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <img id="sig-image" src="" alt="Chữ viết của bạn sẽ xuất hiện tại đây!"/>
+                                    </div>
+                                </div>
+                                <textarea id="sig-dataUrl" class="form-control" rows="5"></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -173,7 +181,7 @@
             &copy; Copyright <strong><span>Name client</span></strong>. All Rights Reserved
         </div>
         <div class="credits">
-            Develop by <a href="">Tuấn Đạt</a>, <a href="">Hoàng Sơn</a>
+            Developed by <a href="">Tuấn Đạt</a>, <a href="">Hoàng Sơn</a>
         </div>
     </footer><!-- End Footer -->
 
@@ -184,6 +192,7 @@
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/draw.js"></script>
 
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
