@@ -25,7 +25,7 @@
     <link href="assets/css/style.css" rel="stylesheet">
 </head>
 
-<body>
+<body onload="init()">
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -149,13 +149,39 @@
                     <div class="card info-card text-center">
                         <h1>Nhìn hình viết chữ</h1>
                         <h6>Hãy viết chữ Hán tương ứng với hình ảnh</h6>
-                        <div class="row">
+                        <div class="row pt-2">
                             <div class="col-6">
                                 <img src="assets/img/Test/game1.jpg" class="img-fluid fix-img" alt="">
                                 <h4>Hoa</h4>
                             </div>
                             <div class="col-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                         <canvas id="sig-canvas" width="420" height="220">
+                                             Pls, Get a better browser.
+                                         </canvas>
+                                     </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button class="btn btn-primary" id="sig-submitBtn">Save</button>
+                                        <button class="btn btn-default" id="sig-clearBtn">Clear</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row pt-4">
+                            <div class="col-6">
                                 <img src="https://hanngutracviet.com/uploads/news/2016_09/2.jpg" class="img-fluid fix-img" alt="">
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <img id="sig-image" src="" alt="Chữ viết của bạn sẽ xuất hiện tại đây!"/>
+                                    </div>
+                                </div>
+                                <textarea id="sig-dataUrl" class="form-control" rows="5"></textarea>
                             </div>
                         </div>
                     </div>
@@ -184,6 +210,7 @@
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/draw.js"></script>
 
 </body>
 
