@@ -556,6 +556,10 @@ h1 {
   flex-shrink: 0;
   flex-grow: 0;
 }
+/* 
+.main-content .info-card img {
+  width: 50%;
+} */
 
 /* Game 1 */
 .main-content .info-card #sig-canvas {

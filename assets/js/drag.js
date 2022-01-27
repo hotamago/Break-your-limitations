@@ -1,8 +1,8 @@
 const dataQuiz = [
   {
-    firstPart: "adobe",
-    secondPart: "Adobe",
-    color: "#ff0000"
+    firstPart: "hành động",
+    secondPart: "bồ đào",
+    idGroup: 1, // 1 : từ ghép + từ đơn
   },
   {
     firstPart: "airbnb",
@@ -141,14 +141,14 @@ function drop(event) {
   const droppableElementQuiz = event.target.getAttribute("data-quiz");
   
   // Pls create isCorrectMatching function with your structure database
-  const isCorrectMatching = true;
+  const isCorrectMatching = draggableElementQuiz === droppableElementQuiz;
   total++;
   if(isCorrectMatching) {
     const draggableElement = document.getElementById(draggableElementQuiz);
     event.target.classList.add("dropped");
     draggableElement.classList.add("dragged");
     draggableElement.setAttribute("draggable", "false");
-    event.target.innerHTML = `<h6 style="color: ${draggableElement.style.color};">${draggableElementQuiz}</h6>`;
+    event.target.innerHTML = `<h6>${draggableElementQuiz}</h6>`;
     correct++;  
   }
   scoreSection.style.opacity = 0;
