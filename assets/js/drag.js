@@ -1,59 +1,15 @@
-const dataQuiz = [
-  {
-    firstPart: "adobe",
-    secondPart: "Adobe",
-    color: "#ff0000"
-  },
-  {
-    firstPart: "airbnb",
-    secondPart: "Airbnb",
-    color: "#fd5c63"
-  },
-  {
-    firstPart: "amazon",
-    secondPart: "Amazon",
-    color: "#333333"
-  },
-  {
-    firstPart: "android",
-    secondPart: "Android",
-    color: "#a4c639"
-  },
-  {
-    firstPart: "angellist",
-    secondPart: "AngelList",
-    color: "#000000"
-  },
-  {
-    firstPart: "angular",
-    secondPart: "Angular",
-    color: "#b52e31"
-  },
-  {
-    firstPart: "app-store-ios",
-    secondPart: "App Store",
-    color: "#5fc9f8"
-  },
-  {
-    firstPart: "apple",
-    secondPart: "Apple",
-    color: "#aaaaaa"
-  },
-  {
-    firstPart: "bitcoin",
-    secondPart: "Bitcoin",
-    color: "#d4af37"
-  },
-  {
-    firstPart: "blackberry",
-    secondPart: "BlackBerry",
-    color: "#000000" 
-  }
-];
+//First setup
+var db = firebase.firestore();
+//U5Dbgs1dUW6iiyxb2y44
+var main_questions = db.collection("main-questions").doc("U5Dbgs1dUW6iiyxb2y44");
+
+//Colm name here bro!!!!!!!!!!!!!!!!!!!!!!
+var nameCol1 = "", nameCol2 = "";
+
 let correct = 0;
 let total = 0;
-const totalDraggableItems = 5;
-const totalMatchingPairs = 5; // Should be <= totalDraggableItems
+var totalDraggableItems = 5;
+var totalMatchingPairs = 5; // Should be <= totalDraggableItems
 
 const scoreSection = document.querySelector(".score");
 const correctSpan = scoreSection.querySelector(".correct");
@@ -65,7 +21,47 @@ const matchingPairs = document.querySelector(".matching-pairs");
 let draggableElements;
 let droppableElements;
 
-initiateGame();
+//Get data
+var BigData = null;
+var firstQuery = false;
+main_questions.get().then((querySnapshot) => {
+  BigData = querySnapshot.data()["questions02"];
+}).catch((error) => {
+  console.log("Error getting documents: ", error);
+});
+//Start game
+//firstPart secondPart
+var dataQuiz = [];
+function GetRandomQuestion(){
+  var index = getRndInteger(0, BigData.length - 1);
+  var coventData = [];
+  for(var i = 0; i<BigData[index]["words"].length; i++){
+    coventData.push({
+      "firstPart": BigData[index]["words"][i]["word1"],
+      "secondPart": BigData[index]["words"][i]["word2"],
+      "id": i
+    });
+  }
+  dataQuiz = coventData;
+  totalDraggableItems = Math.min(dataQuiz.length, 5);
+  totalMatchingPairs = Math.min(dataQuiz.length, 5);
+  nameCol1 = BigData[index]["type_name"][0];
+  nameCol2 = BigData[index]["type_name"][1];
+}
+function StartGame(){
+  GetRandomQuestion();
+  initiateGame();
+}
+//Update
+function super_update() {
+  setTimeout(() => {
+      if (BigData != null && firstQuery == false) {
+          firstQuery = true;
+          StartGame();
+      } else super_update();
+  }, 100);
+}
+super_update();
 
 function initiateGame() {
   const randomDraggable = generateRandomItemsArray(totalDraggableItems, dataQuiz);
@@ -75,7 +71,7 @@ function initiateGame() {
   // Create "draggable-items" and append to DOM
   for(let i=0; i<randomDraggable.length; i++) {
     draggableItems.insertAdjacentHTML("beforeend", `
-    <span class="label draggable" draggable="true" id="${randomDraggable[i].firstPart}">${randomDraggable[i].firstPart}</span>
+    <span class="label draggable" draggable="true" data-quiz="${randomDraggable[i].id}" id="${randomDraggable[i].firstPart}">${randomDraggable[i].firstPart}</span>
     `);
   }
   
@@ -84,7 +80,7 @@ function initiateGame() {
     matchingPairs.insertAdjacentHTML("beforeend", `
       <div class="matching-pair">
         <span class="label">${alphabeticallySortedRandomDroppable[i].secondPart}</span>
-        <span class="droppable" data-quiz="${alphabeticallySortedRandomDroppable[i].firstPart}"></span>
+        <span class="droppable" data-quiz="${alphabeticallySortedRandomDroppable[i].id}"></span>
       </div>
     `);
   }
@@ -112,6 +108,7 @@ function initiateGame() {
 
 function dragStart(event) {
   event.dataTransfer.setData("text", event.target.id); // or "text/plain"
+  event.dataTransfer.setData("idTrue", event.target.getAttribute("data-quiz"));
 }
 
 //Events fired on the drop target
@@ -137,11 +134,13 @@ function dragLeave(event) {
 function drop(event) {
   event.preventDefault();
   event.target.classList.remove("droppable-hover");
+  console.log(event.dataTransfer);
   const draggableElementQuiz = event.dataTransfer.getData("text");
+  const draggableElementQuizId = event.dataTransfer.getData("idTrue");
   const droppableElementQuiz = event.target.getAttribute("data-quiz");
   
   // Pls create isCorrectMatching function with your structure database
-  const isCorrectMatching = true;
+  const isCorrectMatching = (draggableElementQuizId === droppableElementQuiz);
   total++;
   if(isCorrectMatching) {
     const draggableElement = document.getElementById(draggableElementQuiz);
@@ -168,6 +167,7 @@ function drop(event) {
 // Other Event Listeners
 newGameBtn.addEventListener("click", newGameBtnClick);
 function newGameBtnClick() {
+  GetRandomQuestion();
   newGameBtn.classList.remove("new-game-btn-entrance");
   correct = 0;
   total = 0;
