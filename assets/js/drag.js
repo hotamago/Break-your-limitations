@@ -34,7 +34,7 @@ main_questions.get().then((querySnapshot) => {
 //Start game
 //firstPart secondPart
 var dataQuiz = [];
-function GetRandomQuestion(){
+function GetRandomQuestion(idData){
   if (idData == 1) {
     var index = getRndInteger(0, BigData1.length - 1);
     var coventData = [];
@@ -75,7 +75,7 @@ function StartGame(){
 //Update
 function super_update() {
   setTimeout(() => {
-      if (BigData != null && firstQuery == false) {
+      if (firstQuery == false) {
           firstQuery = true;
           StartGame();
       } else super_update();
