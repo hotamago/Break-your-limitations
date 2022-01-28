@@ -105,12 +105,12 @@ function initiateGame() {
       if (dataQuiz[i].id == randomCol1 || dataQuiz[i].id == randomCol2)
         randomDraggable.push(dataQuiz[i]);
     }
+    randomDraggable.sort(() => Math.random() - 0.5);
   }
-  console.log(randomDraggable);
 
   const randomDroppable = totalMatchingPairs < totalDraggableItems ? generateRandomItemsArray(totalMatchingPairs, randomDraggable) : randomDraggable;
   const alphabeticallySortedRandomDroppable = [...randomDroppable].sort((a, b) => a.secondPart.toLowerCase().localeCompare(b.secondPart.toLowerCase()));
-
+  
   // Create "draggable-items" and append to DOM
   for (let i = 0; i < randomDraggable.length; i++) {
     draggableItems.insertAdjacentHTML("beforeend", `
@@ -140,9 +140,11 @@ function initiateGame() {
     classification.insertAdjacentHTML("beforeend", `
     <div class="col-6">
         <img src="assets/img/box1.png" style="width: 50%;" class="img-fluid droppable" alt="" data-quiz="${nameCol[randomCol1].id}">
+        <h6>${nameCol[randomCol1].content}</h6>
     </div>
     <div class="col-6">
         <img src="assets/img/box2.png" style="width: 50%;" class="img-fluid droppable" alt="" data-quiz="${nameCol[randomCol2].id}">
+        <h6>${nameCol[randomCol2].content}</h6>
     </div>
     `);
 
@@ -246,7 +248,7 @@ function drop(event) {
 
   if (isCorrectMatching) {
     const draggableElement = document.getElementById(draggableElementQuiz);
-    event.target.classList.add("dropped");
+    if(idData == 1) event.target.classList.add("dropped");
     draggableElement.classList.add("dragged");
     draggableElement.setAttribute("draggable", "false");
     event.target.innerHTML = `<h6>${draggableElementQuiz}</h6>`;
