@@ -671,6 +671,10 @@ h1 {
   transition: 0.2s;
 }
 
+.main-content img.droppable {
+  border: none;
+}
+
 .main-content .droppable-hover {
   background-color: #bee3f0;
   transform: scale(1.1);
