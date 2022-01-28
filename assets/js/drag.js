@@ -4,7 +4,7 @@ var db = firebase.firestore();
 var main_questions = db.collection("main-questions").doc("U5Dbgs1dUW6iiyxb2y44");
 
 //Colm name here bro!!!!!!!!!!!!!!!!!!!!!!
-var nameCol1 = "", nameCol2 = "";
+var nameCol = [];
 
 let correct = 0;
 let total = 0;
@@ -24,55 +24,89 @@ let draggableElements;
 let droppableElements;
 
 //Get data
-var BigData = null;
+var BigData1 = null;
+var BigData2 = null;
 var firstQuery = false;
 main_questions.get().then((querySnapshot) => {
-  BigData = querySnapshot.data()["questions02"];
+  BigData1 = querySnapshot.data()["questions02"];
+  BigData2 = querySnapshot.data()["questions04"];
 }).catch((error) => {
   console.log("Error getting documents: ", error);
 });
 //Start game
 //firstPart secondPart
 var dataQuiz = [];
-function GetRandomQuestion() {
-  var index = getRndInteger(0, BigData.length - 1);
-  var coventData = [];
-  for (var i = 0; i < BigData[index]["words"].length; i++) {
-    coventData.push({
-      "firstPart": BigData[index]["words"][i]["word1"],
-      "secondPart": BigData[index]["words"][i]["word2"],
-      "id": i
-    });
+function GetRandomQuestion(idData) {
+  if (idData == 1) {
+    var index = getRndInteger(0, BigData1.length - 1);
+    var coventData = [];
+    for (var i = 0; i < BigData1[index]["words"].length; i++) {
+      coventData.push({
+        firstPart: BigData1[index]["words"][i]["word1"],
+        secondPart: BigData1[index]["words"][i]["word2"],
+        id: i,
+      });
+    }
+    dataQuiz = coventData;
+    totalDraggableItems = dataQuiz.length;
+    totalMatchingPairs = dataQuiz.length;
+    nameCol = [];
+  } else {
+    var index = getRndInteger(0, BigData2.length - 1);
+    var coventData = [];
+    for (var i = 0; i < BigData2[index]["words"].length; i++) {
+      coventData.push({
+        firstPart: '',
+        secondPart: BigData1[index]["words"][i]["content"],
+        id: BigData1[index]["words"][i]["type_true"],
+      });
+    }
+    dataQuiz = coventData;
+    totalDraggableItems = dataQuiz.length;
+    totalMatchingPairs = dataQuiz.length;
+    nameCol = [];
+    for (var i = 0; i < BigData2[index]["type_name"].length; i++) {
+      nameCol.push({ "content": BigData2[index]["type_name"][i], "id": i });
+    }
   }
-  dataQuiz = coventData;
-  totalDraggableItems = Math.min(dataQuiz.length, 5);
-  totalMatchingPairs = Math.min(dataQuiz.length, 5);
-  nameCol1 = BigData[index]["type_name"][0];
-  nameCol2 = BigData[index]["type_name"][1];
-
-  // nameCol[idx].content .id
 }
-function StartGame() {
-  GetRandomQuestion();
-  initiateGame();
+function StartGame(idData) {
+  GetRandomQuestion(idData);
+  initiateGame(idData);
 }
 //Update
 function super_update() {
   setTimeout(() => {
-    if (BigData != null && firstQuery == false) {
+    if (BigData1 != null && BigData2 != null && firstQuery == false) {
       firstQuery = true;
-      StartGame();
+      StartGame(1); // 1 or 2
     } else super_update();
   }, 100);
 }
 super_update();
 
-function initiateGame() {
-  const randomDraggable = generateRandomItemsArray(totalDraggableItems, dataQuiz);
+function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function initiateGame(idData) {
+  // Random 2 number in range (0, tổng số nhóm)
+  const randomCol1 = getRndInteger(0, nameCol.length - 2);
+  const randomCol2 = getRndInteger(randomCol1 + 1, nameCol.length - 1);
+
+  let randomDraggable = [];
+  if (idData == 1) 
+    randomDraggable = generateRandomItemsArray(totalDraggableItems, dataQuiz);
+  else {
+    for (let i = 0; i < dataQuiz.length; i++) {
+      if (dataQuiz.id == randomCol1 || dataQuiz.id == randomCol2)
+        randomDraggable.push(dataQuiz.secondPart);
+    }
+  }
+  // console.log(randomDraggable);
+  
   const randomDroppable = totalMatchingPairs < totalDraggableItems ? generateRandomItemsArray(totalMatchingPairs, randomDraggable) : randomDraggable;
   const alphabeticallySortedRandomDroppable = [...randomDroppable].sort((a, b) => a.secondPart.toLowerCase().localeCompare(b.secondPart.toLowerCase()));
-  // Random 2 number in range (0, tổng số nhóm)
-  
 
   // Create "draggable-items" and append to DOM
   for (let i = 0; i < randomDraggable.length; i++) {
@@ -94,16 +128,16 @@ function initiateGame() {
   // Create classification column
   classification.insertAdjacentHTML("beforeend", `
   <div class="col-6">
-      <img src="assets/img/box1.png" style="width: 50%;" class="img-fluid droppable" alt="" data-group-id="${alphabeticallySortedRandomDroppable[0].id}">
+      <img src="assets/img/box1.png" style="width: 50%;" class="img-fluid droppable" alt="" data-group-id="${nameCol[randomCol1].id}">
   </div>
   <div class="col-6">
-      <img src="assets/img/box2.png" style="width: 50%;" class="img-fluid droppable" alt="" data-group-id="${alphabeticallySortedRandomDroppable[1].id}">
+      <img src="assets/img/box2.png" style="width: 50%;" class="img-fluid droppable" alt="" data-group-id="${nameCol[randomCol2].id}">
   </div>
   `);
 
   // Load name col
-  document.getElementById('name-col-1').innerText = nameCol1;
-  document.getElementById('name-col-2').innerText = nameCol2;
+  document.getElementById('name-col-1').innerText = nameCol;
+  document.getElementById('name-col-2').innerText = nameCol;
 
   draggableElements = document.querySelectorAll(".draggable");
   droppableElements = document.querySelectorAll(".droppable");
