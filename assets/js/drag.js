@@ -4,7 +4,7 @@ var db = firebase.firestore();
 var main_questions = db.collection("main-questions").doc("U5Dbgs1dUW6iiyxb2y44");
 
 //Colm name here bro!!!!!!!!!!!!!!!!!!!!!!
-var nameCol1 = "", nameCol2 = "";
+var nameCol = [];
 
 let correct = 0;
 let total = 0;
@@ -22,10 +22,12 @@ let draggableElements;
 let droppableElements;
 
 //Get data
-var BigData = null;
+var BigData1 = null;
+var BigData2 = null;
 var firstQuery = false;
 main_questions.get().then((querySnapshot) => {
-  BigData = querySnapshot.data()["questions02"];
+  BigData1 = querySnapshot.data()["questions02"];
+  BigData2 = querySnapshot.data()["questions04"];
 }).catch((error) => {
   console.log("Error getting documents: ", error);
 });
@@ -33,20 +35,38 @@ main_questions.get().then((querySnapshot) => {
 //firstPart secondPart
 var dataQuiz = [];
 function GetRandomQuestion(){
-  var index = getRndInteger(0, BigData.length - 1);
-  var coventData = [];
-  for(var i = 0; i<BigData[index]["words"].length; i++){
-    coventData.push({
-      "firstPart": BigData[index]["words"][i]["word1"],
-      "secondPart": BigData[index]["words"][i]["word2"],
-      "id": i
-    });
+  if (idData == 1) {
+    var index = getRndInteger(0, BigData1.length - 1);
+    var coventData = [];
+    for (var i = 0; i < BigData1[index]["words"].length; i++) {
+      coventData.push({
+        firstPart: BigData1[index]["words"][i]["word1"],
+        secondPart: BigData1[index]["words"][i]["word2"],
+        id: i,
+      });
+    }
+    dataQuiz = coventData;
+    totalDraggableItems = dataQuiz.length;
+    totalMatchingPairs = dataQuiz.length;
+    nameCol = [];
+  } else {
+    var index = getRndInteger(0, BigData2.length - 1);
+    var coventData = [];
+    for (var i = 0; i < BigData2[index]["words"].length; i++) {
+      coventData.push({
+        firstPart: '',
+        secondPart: BigData1[index]["words"][i]["content"],
+        id: BigData1[index]["words"][i]["type_true"],
+      });
+    }
+    dataQuiz = coventData;
+    totalDraggableItems = dataQuiz.length;
+    totalMatchingPairs = dataQuiz.length;
+    nameCol = [];
+    for(var i = 0; i < BigData2[index]["type_name"].length; i++){
+      nameCol.push({"content": BigData2[index]["type_name"][i], "id" : i});
+    }
   }
-  dataQuiz = coventData;
-  totalDraggableItems = Math.min(dataQuiz.length, 5);
-  totalMatchingPairs = Math.min(dataQuiz.length, 5);
-  nameCol1 = BigData[index]["type_name"][0];
-  nameCol2 = BigData[index]["type_name"][1];
 }
 function StartGame(){
   GetRandomQuestion();
