@@ -202,10 +202,9 @@
         window.onbeforeunload = myConfirmation;
 
         var db = firebase.firestore();
-        //if(getCookie("acc") == "") location.href = "admin_login.html";
-        //var acc = JSON.parse(atob(getCookie("acc")));
-        //firebase.auth().signInWithEmailAndPassword(acc.email, acc.password)
-        firebase.auth().signInWithEmailAndPassword("admin@gmail.com", "123456")
+        if(getCookie("acc") == "") location.href = "admin_login.html";
+        var acc = JSON.parse(atob(getCookie("acc")));
+        firebase.auth().signInWithEmailAndPassword(acc.email, acc.password)
             .then(function (result) {
 
             }).catch(function (error) {
