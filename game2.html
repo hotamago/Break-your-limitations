@@ -113,15 +113,19 @@
                 <div class="col-12">
                     <div class="card info-card text-center">
                         <h1>Xếp đâu cho đúng</h1>
-
-                        <section class="score">
-                            <span class="correct">0</span>/<span class="total">0</span>
-                            <button id="new-game-btn">New Game</button>
-                        </section>
-                        <section class="draggable-items"></section>
-                        <section class="matching-pairs"></section>
-                        <div class="row classification"></div>
-                        <!-- <div class="row">
+                        <button class="btn btn-primary" type="button" disabled="" id="Loading">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading questions...
+                        </button>
+                        <div id="mainGame">
+                            <section class="score">
+                                <span class="correct">0</span>/<span class="total">0</span>
+                                <button id="new-game-btn">New Game</button>
+                            </section>
+                            <section class="draggable-items"></section>
+                            <section class="matching-pairs"></section>
+                            <div class="row classification"></div>
+                            <!-- <div class="row">
                             <div class="col-6">
                                 <img src="assets/img/box1.png" style="width: 50%;" class="img-fluid" alt="">
                             </div>
@@ -129,17 +133,18 @@
                                 <img src="assets/img/box2.png" style="width: 50%;" class="img-fluid" alt="">
                             </div>                            
                         </div> -->
-                        <div class="row">
-                            <table class="table table-ans">
-                                <thead>
-                                  <tr>
-                                    <th scope="col" id="name-col-1">Tên cột 1</th>
-                                    <th scope="col" id="name-col-2">Tên cột 2</th>
-                                  </tr>
-                                </thead>
-                                <tbody class="tbody-ans">
-                                </tbody>
-                              </table>
+                            <div class="row">
+                                <table class="table table-ans">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" id="name-col-1">Tên cột 1</th>
+                                            <th scope="col" id="name-col-2">Tên cột 2</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tbody-ans">
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -151,7 +156,8 @@
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer">
         <div class="credits">
-            Developed by <a href="https://www.facebook.com/pvtd264/" target="_blank">Tuấn Đạt</a>, <a href="https://www.facebook.com/HotaVN" target="_blank">Hoàng Sơn</a>
+            Developed by <a href="https://www.facebook.com/pvtd264/" target="_blank">Tuấn Đạt</a>, <a
+                href="https://www.facebook.com/HotaVN" target="_blank">Hoàng Sơn</a>
         </div>
     </footer><!-- End Footer -->
 

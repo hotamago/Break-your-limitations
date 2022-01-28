@@ -22,6 +22,10 @@ const classification = document.querySelector(".classification");
 const tableAns = document.querySelector(".table-ans");
 const tableBodyAns = document.querySelector(".tbody-ans");
 
+const Loading = document.querySelector("#Loading");
+const MainGame = document.querySelector("#mainGame");
+MainGame.style.display = "none";
+
 let draggableElements;
 let droppableElements;
 
@@ -82,6 +86,8 @@ function super_update() {
   setTimeout(() => {
     if (BigData1 != null && BigData2 != null && firstQuery == false) {
       firstQuery = true;
+      Loading.style.display = "none";
+      MainGame.style.display = "block";
       StartGame(); // 1 or 2
     } else super_update();
   }, 100);
