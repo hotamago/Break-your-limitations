@@ -104,7 +104,7 @@ function initiateGame(idData) {
     }
   }
   // console.log(randomDraggable);
-  
+
   const randomDroppable = totalMatchingPairs < totalDraggableItems ? generateRandomItemsArray(totalMatchingPairs, randomDraggable) : randomDraggable;
   const alphabeticallySortedRandomDroppable = [...randomDroppable].sort((a, b) => a.secondPart.toLowerCase().localeCompare(b.secondPart.toLowerCase()));
 
