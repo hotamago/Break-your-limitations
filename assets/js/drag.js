@@ -172,7 +172,7 @@ function initiateGame(idData) {
       </tr>
     `);
     }
-
+    tableAns.style.display = "none";
   }
 
   // Load name col
