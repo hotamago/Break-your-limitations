@@ -77,6 +77,30 @@ h1 {
 }
 
 /*--------------------------------------------------------------
+# Button play MP3
+--------------------------------------------------------------*/
+.play-mp3 {
+  position: fixed;
+  right: 15px;
+  bottom: 15px;
+  z-index: 99999;
+  background: #4154f1;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  transition: all 0.4s;
+}
+.play-mp3 i {
+  font-size: 16px;
+  color: #fff;
+  line-height: 0;
+}
+.play-mp3:hover {
+  background: #6776f4;
+  color: #fff;
+}
+
+/*--------------------------------------------------------------
 # Override some default Bootstrap stylings
 --------------------------------------------------------------*/
 /* Dropdown menus */
@@ -539,6 +563,7 @@ h1 {
 /* Info Cards */
 .main-content .info-card {
   padding: 2rem 0rem;
+  background-color: #fff2f7;
 }
 
 .main-content .info-card h6 {
@@ -642,7 +667,7 @@ h1 {
 }
 
 .main-content .matching-pair {
-  height: 2.5rem;
+  height: auto;
   width: 50%;
   margin: 1rem auto;
   display: flex;
@@ -656,6 +681,7 @@ h1 {
   align-items: center;
   text-align: center;
   user-select: none;
+  min-height: 2.5rem;;
 }
 
 .main-content .label {

@@ -113,11 +113,18 @@
         <section class="section main-content">
             <div class="row">
                 <div class="col-12">
-                    <div class="card text-center">
+                    <div class="card info-card text-center">
                         <div class="card-body">
                             <div class="card-title">
                                 <h1>Hãy chọn ý đúng</h1>
                             </div>
+
+                            <div class="row py-3">
+                                <div class="col-4"><h6 class="fw-bold">Số câu đúng: {{ correctAns }}</h6></div>
+                                <div class="col-4"><h6 class="fw-bold">Số câu đã làm: {{ totalAns }}</h6></div>
+                                <div class="col-4"><h6 class="fw-bold">Tỉ lệ chính xác: {{ ratioAns }} %</h6></div>
+                            </div>
+
                             <button class="btn btn-primary" type="button" disabled="" v-if="!firstQuery">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 Loading questions...
@@ -155,7 +162,10 @@
                 </div>
             </div>
         </section>
-
+        <audio id="sound" controls class="d-none">
+            <source src="assets/mp3/game3.mp3" type="audio/ogg">
+            Your browser does not support the audio element.
+        </audio>
     </main><!-- End #main -->
 
     <!-- ======= Footer ======= -->
@@ -165,7 +175,8 @@
         </div>
     </footer><!-- End Footer -->
 
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="fas fa-arrow-up"></i></a>
+    <!-- <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="fas fa-arrow-up"></i></a> -->
+    <a class="play-mp3 d-flex align-items-center justify-content-center"><i class="fas fa-music"></i></a>
 
     <!-- Vendor JS Files -->
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -224,7 +235,10 @@
                 btn_confi: ["btn-danger", "btn-success"],
                 showAns: 0,
                 questions: null,
-                firstQuery: false
+                firstQuery: false,
+                correctAns: 0,
+                totalAns: 0,
+                ratioAns: null
             },
             computed: {
                 calWidthTime: function () {
@@ -264,11 +278,14 @@
                         this.showAns = 1;
                         if(true_ans) {
                             toastr.success('Correct!');
+                            this.correctAns++;
                         } else{
                             toastr.error('Incorrect!');
                             this.showAns = 2;
                         }
                     }
+                    this.totalAns++;
+                    this.ratioAns = (this.correctAns / this.totalAns * 100).toFixed(2);
                 }
             },
             created: function () {

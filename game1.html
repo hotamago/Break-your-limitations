@@ -114,6 +114,7 @@
                     <div class="card info-card text-center">
                         <h1>Nhìn hình viết chữ</h1>
                         <h6 v-if="(showAns == 0)">Ghi nhớ chữ sau trong 15 giây</h6>
+                        
                         <button class="btn btn-primary" type="button" disabled="" v-if="!firstQuery">
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Loading questions...
@@ -130,6 +131,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <h6 class="py-1">Số câu đã làm: {{ totalAns }}</h6>
                             <div class="row">
                                 <div class="col-md-12 col-lg-6" v-if="(showAns != 2)">
                                     <img v-bind:src="question.img1" class="img-fluid fix-img" alt="">
@@ -164,7 +166,10 @@
             </div>
 
         </section>
-
+        <audio id="sound" controls class="d-none">
+            <source src="assets/mp3/game1.mp3" type="audio/ogg">
+            Your browser does not support the audio element.
+        </audio>
     </main><!-- End #main -->
 
     <!-- ======= Footer ======= -->
@@ -173,8 +178,9 @@
             Developed by <a href="https://www.facebook.com/pvtd264/" target="_blank">Tuấn Đạt</a>, <a href="https://www.facebook.com/HotaVN" target="_blank">Hoàng Sơn</a>
         </div>
     </footer><!-- End Footer -->
-
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="fas fa-arrow-up"></i></a>
+    <!-- <i class="fas fa-volume-mute"></i> -->
+    <!-- <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="fas fa-arrow-up"></i></a> -->
+    <a class="play-mp3 d-flex align-items-center justify-content-center"><i class="fas fa-music"></i></a>
 
     <!-- Vendor JS Files -->
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -220,7 +226,8 @@
                 timenow: 0,
                 showAns: 0,
                 questions: null,
-                firstQuery: false
+                firstQuery: false,
+                totalAns:0
             },
             computed: {
                 calWidthTime: function () {
@@ -259,6 +266,7 @@
                     if (this.showAns == 1) {
                         this.showAns = 2;
                     }
+                    this.totalAns++;
                 },
                 clearScreen: function () {
                     //Paint

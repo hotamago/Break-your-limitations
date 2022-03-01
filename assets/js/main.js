@@ -100,6 +100,15 @@
     window.addEventListener('load', toggleBacktotop)
     onscroll(document, toggleBacktotop)
   }
+  /**
+   * Play music
+   */
+  let playMP3 = select('.play-mp3')
+  if (playMP3) {
+    on('click', '.play-mp3', function(e) {
+      document.getElementById('sound').play();
+    })
+  }
 
   /**
    * Initiate tooltips

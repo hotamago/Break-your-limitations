@@ -118,6 +118,7 @@
                             Loading questions...
                         </button>
                         <div id="mainGame">
+                            <p class="fw-bold pt-2">Số lần đúng/Số lần thử</p> 
                             <section class="score">
                                 <span class="correct">0</span>/<span class="total">0</span>
                                 <button id="new-game-btn">New Game</button>
@@ -150,7 +151,10 @@
                 </div>
             </div>
         </section>
-
+        <audio id="sound" controls class="d-none">
+            <source src="assets/mp3/game2.mp3" type="audio/ogg">
+            Your browser does not support the audio element.
+        </audio>
     </main><!-- End #main -->
 
     <!-- ======= Footer ======= -->
@@ -161,7 +165,8 @@
         </div>
     </footer><!-- End Footer -->
 
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="fas fa-arrow-up"></i></a>
+    <!-- <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="fas fa-arrow-up"></i></a> -->
+    <a class="play-mp3 d-flex align-items-center justify-content-center"><i class="fas fa-music"></i></a>
 
     <!-- Vendor JS Files -->
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
