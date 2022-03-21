@@ -29,11 +29,21 @@ MainGame.style.display = "none";
 let draggableElements;
 let droppableElements;
 
+//Check Level
+var packageLevel = null;
+document.getElementById("l1").addEventListener("click", function(){ packageLevel="1"; });
+document.getElementById("l2").addEventListener("click", function(){ packageLevel="2"; });
+document.getElementById("l3").addEventListener("click", function(){ packageLevel="3"; });
+document.getElementById("l4").addEventListener("click", function(){ packageLevel="4"; });
+document.getElementById("l5").addEventListener("click", function(){ packageLevel="5"; });
+
+
 //Get data
 var idData = 1;
 var BigData1 = null;
 var BigData2 = null;
 var firstQuery = false;
+
 main_questions.get().then((querySnapshot) => {
   BigData1 = querySnapshot.data()["questions02"];
   BigData2 = querySnapshot.data()["questions04"];
@@ -46,7 +56,13 @@ var dataQuiz = [];
 function GetRandomQuestion() {
   if (idData == 1) {
     var index = getRndInteger(0, BigData1.length - 1);
+    while(BigData1[index].level != packageLevel)
+    {
+      index = getRndInteger(0, BigData1.length - 1);
+    }
+
     var coventData = [];
+    console.log(BigData1[index].level);
     for (var i = 0; i < BigData1[index]["words"].length; i++) {
       coventData.push({
         firstPart: BigData1[index]["words"][i]["word1"],
@@ -60,6 +76,11 @@ function GetRandomQuestion() {
     nameCol = [];
   } else {
     var index = getRndInteger(0, BigData2.length - 1);
+    while(BigData2[index].level != packageLevel)
+    {
+      index = getRndInteger(0, BigData2.length - 1);
+    }
+
     var coventData = [];
     for (var i = 0; i < BigData2[index]["words"].length; i++) {
       coventData.push({
@@ -84,7 +105,7 @@ function StartGame() {
 //Update
 function super_update() {
   setTimeout(() => {
-    if (BigData1 != null && BigData2 != null && firstQuery == false) {
+    if (BigData1 != null && BigData2 != null && firstQuery == false && packageLevel != null) {
       firstQuery = true;
       Loading.style.display = "none";
       MainGame.style.display = "block";

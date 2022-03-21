@@ -113,13 +113,25 @@
                 <div class="col-12">
                     <div class="card info-card text-center">
                         <h1>Nhìn hình viết chữ</h1>
-                        <h6 v-if="(showAns == 0)">Ghi nhớ chữ sau trong 15 giây</h6>
+                        <div class="row choose-level pt-5" v-if="!packageLevel">
+                            <div class="col-4">
+                                <button type="button" class="btn btn-primary" @click="l1">Mức dễ</button>
+                            </div>
+                            <div class="col-4">
+                                <button type="button" class="btn btn-primary" @click="l2">Mức trung bình</button>
+                            </div>
+                            <div class="col-4">
+                                <button type="button" class="btn btn-primary" @click="l3">Mức khó</button>
+                            </div>
+                        </div>
                         
-                        <button class="btn btn-primary" type="button" disabled="" v-if="!firstQuery">
+                        <button class="btn btn-primary" type="button" disabled="" v-if="!firstQuery" v-show="packageLevel">
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Loading questions...
                         </button>
-                        <div v-show="firstQuery">
+
+                        <div v-show="packageLevel">
+                            <h6 v-if="(showAns == 0)">Ghi nhớ chữ sau trong 15 giây</h6>
                             <div class="d-grid justify-content-center pb-2" v-if="(showAns == 0)">
                                 <div class="timer d-flex align-items-center text-center rounded">
                                     <div
@@ -220,13 +232,15 @@
                 question: {
                     img1: "",
                     img2: "",
-                    title: ""
+                    title: "",
+                    level: ""
                 },
                 timemax: 15,
                 timenow: 0,
                 showAns: 0,
                 questions: null,
                 firstQuery: false,
+                packageLevel: null,
                 totalAns:0
             },
             computed: {
@@ -235,6 +249,9 @@
                 }
             },
             methods: {
+                l1 () { this.packageLevel = "1"; },
+                l2 () { this.packageLevel = "2"; },
+                l3 () { this.packageLevel = "3"; },
                 countDownTimer: function () {
                     if (this.timenow < this.timemax) {
                         setTimeout(() => {
@@ -248,7 +265,7 @@
                 },
                 super_update: function () {
                     setTimeout(() => {
-                        if (this.questions != null && this.firstQuery == false) {
+                        if (this.questions != null && this.firstQuery == false && this.packageLevel != null) {
                             this.firstQuery = true;
                             this.getRandomQuestion();
                         }
@@ -259,6 +276,12 @@
                     this.showAns = false;
                     this.timenow = 0;
                     var index = getRndInteger(0, this.questions.length - 1);
+                    
+                    while(this.questions[index].level != this.packageLevel)
+                    {
+                        index = getRndInteger(0, this.questions.length - 1);
+                    }
+
                     this.question = this.questions[index];
                     this.countDownTimer();
                 },

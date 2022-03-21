@@ -119,17 +119,34 @@
                                 <h1>Hãy chọn ý đúng</h1>
                             </div>
 
-                            <div class="row py-3">
-                                <div class="col-4"><h6 class="fw-bold">Số câu đúng: {{ correctAns }}</h6></div>
-                                <div class="col-4"><h6 class="fw-bold">Số câu đã làm: {{ totalAns }}</h6></div>
-                                <div class="col-4"><h6 class="fw-bold">Tỉ lệ chính xác: {{ ratioAns }} %</h6></div>
+                            <div class="row justify-content-around choose-level pt-5" v-if="!packageLevel">
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-primary" @click="l1">Chữ</button>
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-primary" @click="l2">Từ</button>
+                                </div>
+                                <div class="col-3">
+                                    <button type="button" class="btn btn-primary" @click="l3">Cụm từ</button>
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-primary" @click="l4">Câu</button>
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-primary" @click="l5">Đoạn</button>
+                                </div>
                             </div>
 
-                            <button class="btn btn-primary" type="button" disabled="" v-if="!firstQuery">
+                            <button class="btn btn-primary" type="button" disabled="" v-if="!firstQuery" v-show="packageLevel">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 Loading questions...
                             </button>
-                            <div class="box-content" v-if="firstQuery">
+                            <div class="box-content" v-show="packageLevel">
+                                <div class="row py-3">
+                                    <div class="col-4"><h6 class="fw-bold">Số câu đúng: {{ correctAns }}</h6></div>
+                                    <div class="col-4"><h6 class="fw-bold">Số câu đã làm: {{ totalAns }}</h6></div>
+                                    <div class="col-4"><h6 class="fw-bold">Tỉ lệ chính xác: {{ ratioAns }} %</h6></div>
+                                </div>
                                 <div class="row mt-2">
                                     <div class="col-12">
                                         <h5 class="fw-bold">Câu hỏi</h5>
@@ -238,7 +255,9 @@
                 firstQuery: false,
                 correctAns: 0,
                 totalAns: 0,
-                ratioAns: null
+                ratioAns: null,
+                level: "",
+                packageLevel: null
             },
             computed: {
                 calWidthTime: function () {
@@ -246,6 +265,11 @@
                 }
             },
             methods: {
+                l1 () { this.packageLevel = "1"; },
+                l2 () { this.packageLevel = "2"; },
+                l3 () { this.packageLevel = "3"; },
+                l4 () { this.packageLevel = "4"; },
+                l5 () { this.packageLevel = "5"; },
                 countDownTimer: function () {
                     if (this.timenow < this.timemax) {
                         setTimeout(() => {
@@ -258,7 +282,7 @@
                 },
                 super_update: function () {
                     setTimeout(() => {
-                        if (this.questions != null && this.firstQuery == false) {
+                        if (this.questions != null && this.firstQuery == false && this.packageLevel != null) {
                             this.firstQuery = true;
                             this.getRandomQuestion();
                         }
@@ -269,6 +293,11 @@
                     this.showAns = false;
                     this.timenow = 0;
                     var index = getRndInteger(0, this.questions.length - 1);
+                    while(this.questions[index].level != this.packageLevel)
+                    {
+                        index = getRndInteger(0, this.questions.length - 1);
+                    }
+
                     this.question = marked.parse(this.questions[index].question);
                     this.answers = this.questions[index].ans;
                     shuffle(this.answers);

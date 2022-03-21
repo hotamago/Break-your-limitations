@@ -113,10 +113,28 @@
                 <div class="col-12">
                     <div class="card info-card text-center">
                         <h1>Xếp đâu cho đúng</h1>
-                        <button class="btn btn-primary" type="button" disabled="" id="Loading">
+                        
+                        <div class="row justify-content-around choose-level pt-5" id="Loading">
+                            <div class="col-2">
+                                <button type="button" class="btn btn-primary" id="l1">Chữ</button>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-primary" id="l2">Từ</button>
+                            </div>
+                            <div class="col-3">
+                                <button type="button" class="btn btn-primary" id="l3">Cụm từ</button>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-primary" id="l4">Câu</button>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-primary" id="l5">Đoạn</button>
+                            </div>
+                        </div>
+                        <!-- <button class="btn btn-primary" type="button" disabled="" id="Loading">
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Loading questions...
-                        </button>
+                        </button> -->
                         <div id="mainGame">
                             <p class="fw-bold pt-2">Số lần đúng/Số lần thử</p> 
                             <section class="score">
